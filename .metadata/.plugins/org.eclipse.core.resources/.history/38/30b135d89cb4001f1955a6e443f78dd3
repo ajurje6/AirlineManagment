@@ -1,0 +1,27 @@
+package managment;
+import javax.swing.*;
+import java.awt.*;
+public class Login extends JFrame{
+	Login(){
+		getContentPane().setBackground(Color.GRAY);
+		//Sets up the frame
+		setLayout(null);
+		setSize(500,300);
+		setTitle("Login to the system");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+        
+        //Components
+        JLabel lblUsername = new JLabel("Username:");
+        JTextField txtUsername = new JTextField();
+        JLabel lblPassword = new JLabel("Password:");
+        JPasswordField txtPassword = new JPasswordField();
+        JButton btnLogin = new JButton("Login");
+        JButton btnCancel = new JButton("Cancel");
+
+	}
+	public static void main(String[] args) {
+	new Login();
+	}
+
+}

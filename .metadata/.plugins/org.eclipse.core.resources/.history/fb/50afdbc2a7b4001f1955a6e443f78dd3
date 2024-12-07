@@ -1,0 +1,12 @@
+package managment;
+
+public class DBConnection {
+	public DBConnection() {
+	try {
+	// Load MySQL JDBC Driver
+    Class.forName("com.mysql.cj.jdbc.Driver");
+		}
+	}catch(Exception e){
+		e.printStackTrace();
+	}
+}

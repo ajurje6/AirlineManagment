@@ -1,0 +1,39 @@
+package managment;
+import javax.swing.*;
+import java.awt.*;
+public class Login extends JFrame{
+	private static final long serialVersionUID = 1L;
+	//Ensures that the class is compatible across different JVMs when serialized and deserialized
+	Login(){
+		getContentPane().setBackground(Color.GRAY);
+		//Sets up the frame
+		setLayout(null);
+		setSize(500,300);
+		setTitle("Login to the system");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+        setVisible(true);
+        //Components
+        JLabel lblUsername = new JLabel("Username:");
+        JTextField txtUsername = new JTextField();
+        JLabel lblPassword = new JLabel("Password:");
+        JPasswordField txtPassword = new JPasswordField();
+        JButton btnLogin = new JButton("Login");
+        JButton btnCancel = new JButton("Cancel");
+        //Adding components to the frame
+        add(lblUsername);
+        add(txtUsername);
+        add(lblPassword);
+        add(txtPassword);
+        add(btnLogin);
+        add(btnCancel);
+        //Positioning
+        lblUsername.setBounds(20, 20, 175, 25);
+        lblPassword.setBounds(20, 90, 175, 25);
+        txtUsername.setBounds(100, 20, 200, 25);
+	}
+	public static void main(String[] args) {
+	new Login();
+	}
+
+}

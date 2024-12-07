@@ -1,0 +1,12 @@
+package managment;
+import javax.swing.*;
+import java.awt.*;
+public class Login extends Jframe{
+	Login(){
+		getContentPane().setBackground(Color.GRAY);
+	}
+	public static void main(String[] args) {
+	new Login();
+	}
+
+}
