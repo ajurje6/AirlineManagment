@@ -1,0 +1,27 @@
+package managment;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import java.sql.*;
+public class Cancel extends JFrame {
+     Cancel(){
+    	 setTitle("Trip Details");
+         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+         setSize(950, 650);
+         setLayout(null);
+         setLocationRelativeTo(null);
+         getContentPane().setBackground(Color.WHITE);
+
+         JLabel heading = new JLabel("Ticket cancellation");
+         heading.setFont(new Font("Arial", Font.BOLD, 28));
+         heading.setForeground(new Color(0, 102, 204));
+         heading.setBounds(375, 20, 300, 30);
+         add(heading);
+         setVisible(true);
+     }
+	public static void main(String[] args) {
+		new Cancel();
+
+	}
+
+}

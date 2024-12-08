@@ -1,0 +1,80 @@
+package managment;
+
+import javax.swing.*;
+import java.awt.*;
+
+public class Home extends JFrame {
+    Home() {
+        // Get the screen dimensions
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int screenWidth = screenSize.width;
+        int screenHeight = screenSize.height;
+
+        // Set the frame to full-screen size
+        setTitle("Home Page");
+        setSize(screenWidth, screenHeight);
+        setLayout(null); // Absolute positioning
+        setLocationRelativeTo(null); // Centering window (though not necessary for full-screen)
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Close on exit
+
+        // Loading and scaling the image
+        ImageIcon backgroundImage = new ImageIcon(getClass().getResource("/managment/images/homeBackground.jpg"));
+        Image img = backgroundImage.getImage();
+        Image scaledImg = img.getScaledInstance(screenWidth, screenHeight, Image.SCALE_SMOOTH);
+        backgroundImage = new ImageIcon(scaledImg);
+
+        // Creating a JLabel with the image
+        JLabel backgroundLbl = new JLabel(backgroundImage);
+        backgroundLbl.setBounds(0, 0, screenWidth, screenHeight); // Match the frame size
+        add(backgroundLbl);
+        JLabel welcomeLbl = new JLabel("Welcome to Croatia Airlines", SwingConstants.CENTER);
+        welcomeLbl.setFont(new Font("Arial", Font.BOLD, 36)); // Font and size
+        welcomeLbl.setForeground(Color.WHITE); // Text color
+        welcomeLbl.setBounds(screenWidth / 4, 20, screenWidth / 2, 50); // Position at top-center
+        backgroundLbl.add(welcomeLbl); // Add the label to the background
+        // Adding the menu bar
+        setJMenuBar(createMenuBar());
+
+        setVisible(true); // Make the frame visible
+    }
+    // Method to create the menu bar
+    private JMenuBar createMenuBar() {
+        JMenuBar menuBar = new JMenuBar();
+
+        // Creating menu items with colors
+        JMenu reservationMenu = createColoredMenu("Reservation Details", Color.RED);
+        JMenu cancelMenu = createColoredMenu("Cancel Ticket", Color.BLUE);
+        JMenu tripMenu = createColoredMenu("Trip Details", Color.RED);
+        JMenu bookingMenu = createColoredMenu("Booking", Color.BLUE);
+        JMenu customerMenu = createColoredMenu("Add Customer Details", Color.RED);
+        JMenu flightMenu = createColoredMenu("Flight Info", Color.BLUE);
+        JMenu ticketMenu = createColoredMenu("Ticket", Color.RED);
+
+        // Adding menus to the menu bar with spacing
+        menuBar.add(reservationMenu);
+        menuBar.add(Box.createHorizontalStrut(20)); // Spacing
+        menuBar.add(cancelMenu);
+        menuBar.add(Box.createHorizontalStrut(20)); // Spacing
+        menuBar.add(tripMenu);
+        menuBar.add(Box.createHorizontalStrut(20)); // Spacing
+        menuBar.add(bookingMenu);
+        menuBar.add(Box.createHorizontalStrut(20)); // Spacing
+        menuBar.add(customerMenu);
+        menuBar.add(Box.createHorizontalStrut(20)); // Spacing
+        menuBar.add(flightMenu);
+        menuBar.add(Box.createHorizontalStrut(20)); // Spacing
+        menuBar.add(ticketMenu);
+
+        return menuBar;
+    }
+    private JMenu createColoredMenu(String text, Color color) {
+        JMenu menu = new JMenu(text);
+        menu.setForeground(color); // Set the text color
+        menu.setFont(new Font("Arial", Font.BOLD, 16)); // Set the font and size
+        return menu;
+    }
+
+    public static void main(String[] args) {
+        new Home();
+    }
+}

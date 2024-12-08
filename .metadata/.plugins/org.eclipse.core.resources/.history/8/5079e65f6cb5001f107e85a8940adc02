@@ -1,0 +1,241 @@
+package managment;
+
+import java.awt.*;
+import javax.swing.*;
+import java.awt.event.*;
+import java.sql.*;
+import com.toedter.calendar.JDateChooser;
+import java.util.Random;
+
+public class Booking extends JFrame implements ActionListener {
+
+    JTextField txtPassengerId;
+    JLabel tfname, tfsurname, tfnationality, tfaddress, labelgender, labelfname, labelfcode, labelsurname;
+    JButton bookflight, fetchButton, flight;
+    Choice source, destination;
+    JDateChooser dcdate;
+
+    public Booking() {
+        getContentPane().setBackground(Color.WHITE);
+        setLayout(null);
+        
+        JLabel heading = new JLabel("Book Flight");
+        heading.setBounds(420, 20, 500, 35);
+        heading.setFont(new Font("Tahoma", Font.PLAIN, 32));
+        heading.setForeground(Color.BLUE);
+        add(heading);
+        
+        JLabel lblaadhar = new JLabel("Aadhar");
+        lblaadhar.setBounds(60, 80, 150, 25);
+        lblaadhar.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        add(lblaadhar);
+        
+        txtPassengerId = new JTextField();
+        txtPassengerId.setBounds(220, 80, 150, 25);
+        add(txtPassengerId);
+        
+        fetchButton = new JButton("Fetch User");
+        fetchButton.setBackground(Color.BLACK);
+        fetchButton.setForeground(Color.WHITE);
+        fetchButton.setBounds(380, 80, 120, 25);
+        fetchButton.addActionListener(this);
+        add(fetchButton);
+        
+        JLabel lblname = new JLabel("Name");
+        lblname.setBounds(60, 130, 150, 25);
+        lblname.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        add(lblname);
+        
+        tfname = new JLabel();
+        tfname.setBounds(220, 130, 150, 25);
+        add(tfname);
+        
+        JLabel lblsurname = new JLabel("Surname");
+        lblsurname.setBounds(60, 150, 150, 25);
+        lblsurname.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        add(lblsurname);
+        
+        tfsurname = new JLabel();
+        tfsurname.setBounds(220, 130, 150, 25);
+        add(tfsurname);
+        
+        JLabel lblnationality = new JLabel("Nationality");
+        lblnationality.setBounds(60, 180, 150, 25);
+        lblnationality.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        add(lblnationality);
+        
+        tfnationality = new JLabel();
+        tfnationality.setBounds(220, 180, 150, 25);
+        add(tfnationality);
+        
+        JLabel lbladdress = new JLabel("Address");
+        lbladdress.setBounds(60, 230, 150, 25);
+        lbladdress.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        add(lbladdress);
+        
+        tfaddress = new JLabel();
+        tfaddress.setBounds(220, 230, 150, 25);
+        add(tfaddress);
+        
+        JLabel lblgender = new JLabel("Gender");
+        lblgender.setBounds(60, 280, 150, 25);
+        lblgender.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        add(lblgender);
+        
+        labelgender = new JLabel("Gender");
+        labelgender.setBounds(220, 280, 150, 25);
+        add(labelgender);
+        
+        JLabel lblsource = new JLabel("Source");
+        lblsource.setBounds(60, 330, 150, 25);
+        lblsource.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        add(lblsource);
+        
+        source = new Choice();
+        source.setBounds(220, 330, 150, 25);       
+        add(source);
+        
+        JLabel lbldest = new JLabel("Destination");
+        lbldest.setBounds(60, 380, 150, 25);
+        lbldest.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        add(lbldest);
+        
+        destination = new Choice();
+        destination.setBounds(220, 380, 150, 25);       
+        add(destination);
+        
+        try (Connection conn = DBConnection.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT * FROM flightinfo")) {
+            
+            while (rs.next()) {
+                source.add(rs.getString("origin"));
+                destination.add(rs.getString("destination"));
+            }
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        flight = new JButton("Fetch Flights");
+        flight.setBackground(Color.BLACK);
+        flight.setForeground(Color.WHITE);
+        flight.setBounds(380, 380, 120, 25);
+        flight.addActionListener(this);
+        add(flight);
+        
+        JLabel lblfname = new JLabel("Flight Name");
+        lblfname.setBounds(60, 430, 150, 25);
+        lblfname.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        add(lblfname);
+        
+        labelfname = new JLabel();
+        labelfname.setBounds(220, 430, 150, 25);
+        add(labelfname);
+        
+        JLabel lblfcode = new JLabel("Flight Code");
+        lblfcode.setBounds(60, 480, 150, 25);
+        lblfcode.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        add(lblfcode);
+        
+        labelfcode = new JLabel();
+        labelfcode.setBounds(220, 480, 150, 25);
+        add(labelfcode);
+        
+        JLabel lbldate = new JLabel("Date of Travel");
+        lbldate.setBounds(60, 530, 150, 25);
+        lbldate.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        add(lbldate);
+        
+        dcdate = new JDateChooser();
+        dcdate.setBounds(220, 530, 150, 25);
+        add(dcdate);
+
+        bookflight = new JButton("Book Flight");
+        bookflight.setBackground(Color.BLACK);
+        bookflight.setForeground(Color.WHITE);
+        bookflight.setBounds(220, 580, 150, 25);
+        bookflight.addActionListener(this);
+        add(bookflight);
+
+        setSize(1100, 700);
+        setLocation(200, 50);
+        setVisible(true);
+    }
+
+    public void actionPerformed(ActionEvent ae) {
+        try (Connection conn = DBConnection.getConnection()) {
+            if (ae.getSource() == fetchButton) {
+                String PassengerId = txtPassengerId.getText();
+
+                String query = "SELECT * FROM passenger WHERE passenger_id = ?";
+                try (PreparedStatement ps = conn.prepareStatement(query)) {
+                    ps.setString(1, PassengerId);
+                    try (ResultSet rs = ps.executeQuery()) {
+                        if (rs.next()) {
+                            tfname.setText(rs.getString("name")); 
+                            tfname.setText(rs.getString("surname"));
+                            tfnationality.setText(rs.getString("nationality")); 
+                            tfaddress.setText(rs.getString("address"));
+                            labelgender.setText(rs.getString("gender"));
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Please enter a correct PassengerId");
+                        }
+                    }
+                }
+            } else if (ae.getSource() == flight) {
+                String src = source.getSelectedItem();
+                String dest = destination.getSelectedItem();
+
+                String query = "SELECT * FROM flightinfo WHERE origin = ? AND destination = ?";
+                try (PreparedStatement ps = conn.prepareStatement(query)) {
+                    ps.setString(1, src);
+                    ps.setString(2, dest);
+                    try (ResultSet rs = ps.executeQuery()) {
+                        if (rs.next()) {
+                            labelfname.setText(rs.getString("f_name"));
+                            labelfcode.setText(rs.getString("f_code"));
+                        } else {
+                            JOptionPane.showMessageDialog(null, "No Flights Found.");
+                        }
+                    }
+                }
+            } else if (ae.getSource() == bookflight) {
+                Random random = new Random();
+                String PassengerId = txtPassengerId.getText();
+                String name = tfname.getText(); 
+                String surname = tfsurname.getText();
+                String nationality = tfnationality.getText();
+                String flightcode = labelfcode.getText();
+                String src = source.getSelectedItem(); 
+                String des = destination.getSelectedItem();
+                String ddate = ((JTextField) dcdate.getDateEditor().getUiComponent()).getText();
+
+                String query = "INSERT INTO reservations VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                try (PreparedStatement ps = conn.prepareStatement(query)) {
+                    ps.setString(1, PassengerId);
+                    ps.setString(2, name);
+                    ps.setString(3, surname);
+                    ps.setString(4, nationality);
+                    ps.setString(5, flightcode);
+                    ps.setString(6, src);
+                    ps.setString(7, des);
+                    ps.setString(8, ddate);
+                    ps.setString(9, "PNR-" + random.nextInt(1000000));
+                    ps.executeUpdate();
+                    
+                    JOptionPane.showMessageDialog(null, "Ticket Booked Successfully");
+                    setVisible(false);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) {
+        new Booking();
+    }
+}
+
+

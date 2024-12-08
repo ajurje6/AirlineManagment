@@ -1,0 +1,48 @@
+package managment;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import java.sql.*;
+public class Cancel extends JFrame implements ActionListener{
+	    JTextField txtPnr;
+	    JLabel lblFlightName, cancellation, lblFlightCode, lblDate;
+	    JButton fetchButton, flight;
+     Cancel(){
+    	 setTitle("Trip Details");
+         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+         setSize(950, 650);
+         setLayout(null);
+         setLocationRelativeTo(null);
+         getContentPane().setBackground(Color.WHITE);
+
+         JLabel heading = new JLabel("Ticket cancellation");
+         heading.setFont(new Font("Arial", Font.BOLD, 28));
+         heading.setForeground(new Color(0, 102, 204));
+         heading.setBounds(325, 20, 300, 30);
+         add(heading);
+         
+         ImageIcon image = new ImageIcon(ClassLoader.getSystemResource("managment/images/cancel.png"));
+         JLabel lblImage = new JLabel(image);
+         lblImage.setBounds(700, 300, 200, 200);
+         add(lblImage);
+         
+         JLabel lblPnr = new JLabel("PNR Number");
+         lblPnr.setBounds(60, 80, 150, 25);
+         lblPnr.setFont(new Font("Tahoma", Font.PLAIN, 16));
+         add(lblPnr);
+         
+         txtPnr = new JTextField();
+         txtPnr.setBounds(220, 80, 150, 25);
+         add(txtPnr);
+         
+         setVisible(true);
+     }
+     public void actionPerformed(ActionEvent ae) {
+    	 
+     }
+	public static void main(String[] args) {
+		new Cancel();
+
+	}
+
+}

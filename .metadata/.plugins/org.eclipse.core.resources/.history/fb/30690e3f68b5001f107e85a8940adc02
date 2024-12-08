@@ -1,0 +1,38 @@
+package managment;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.sql.*;
+import com.toedter.calendar.JDateChooser;
+import java.util.Random;
+
+public class Booking extends JFrame implements ActionListener {
+
+    private JTextField txtPassengerId;
+    private JLabel lblName, lblNationality, lblAddress, lblGender, lblFlightName, lblFlightCode;
+    private JButton btnBookFlight, btnFetchUser, btnFetchFlights;
+    private Choice choiceSource, choiceDestination;
+    private JDateChooser dcTravelDate;
+
+    public Booking() {
+        getContentPane().setBackground(Color.WHITE);
+        setLayout(null);
+        setTitle("Ticket Booking");
+        setSize(800,600);
+        setVisible(true);
+        // Heading
+        JLabel lblHeading = new JLabel("Book Flight");
+        lblHeading.setBounds(420, 20, 500, 35);
+        lblHeading.setFont(new Font("Arial", Font.PLAIN, 32));
+        lblHeading.setForeground(Color.BLUE);
+        add(lblHeading);
+    }
+
+
+    public static void main(String[] args) {
+        new Booking();
+    }
+}
+
+

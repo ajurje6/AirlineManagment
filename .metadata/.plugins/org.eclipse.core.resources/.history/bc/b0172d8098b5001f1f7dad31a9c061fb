@@ -1,0 +1,41 @@
+package managment;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.sql.*;
+public class TripDetails extends JFrame implements ActionListener{
+	 JTable table;
+	 JTextField txtPnr;
+	TripDetails(){
+		getContentPane().setBackground(Color.WHITE);
+        // Create JFrame
+    	setTitle("TRIP DETAILS");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(950, 650); 
+        setLayout(null);
+        setVisible(true);
+        setLocationRelativeTo(null);
+        JLabel heading = new JLabel("Trip details");
+        heading.setBounds(375, 20, 300, 30);
+        heading.setFont(new Font("Arial", Font.PLAIN, 24));
+        heading.setForeground(Color.BLUE);
+        add(heading);
+        JLabel lblPnr = new JLabel("PNR Details");
+        lblPnr.setFont(new Font("Arial", Font.PLAIN, 26));
+        lblPnr.setBounds(50, 250, 100, 25);
+        add(lblPnr);
+        
+        txtPnr = new JTextField();
+        txtPnr.setBounds(160, 50, 220, 25);
+        add(txtPnr);
+	}
+	
+	public void actionPerformed(ActionEvent ae) {
+		
+	}
+	public static void main(String[] args) {
+	new TripDetails();
+	}
+
+}

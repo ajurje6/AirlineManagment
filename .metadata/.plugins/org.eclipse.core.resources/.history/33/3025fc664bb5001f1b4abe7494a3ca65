@@ -1,0 +1,43 @@
+package managment;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class AddCustomer extends JFrame implements ActionListener {
+	JTextField txtName, txtSurname, txtNationality, txtAddress,txtPhone;
+    JRadioButton rbMale, rbFemale;
+    // Constructor to initialize the window
+    public AddCustomer() {
+    	 getContentPane().setBackground(Color.WHITE);
+        // Create JFrame
+    	 setTitle("ADD CUSTOMER");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(850, 600); 
+        setLayout(null);
+        JLabel heading = new JLabel("PLEASE ADD CUSTOMER DETAILS");
+        heading.setBounds(175, 20, 600, 30);
+        heading.setFont(new Font("Arial", Font.PLAIN, 26));
+        heading.setForeground(Color.RED);
+        add(heading);
+        
+        JLabel lblname = new JLabel("Name");
+        lblname.setBounds(400, 80, 150, 25);
+        lblname.setFont(new Font("Arial", Font.PLAIN, 20));
+        add(lblname);
+        txtName = new JTextField();
+        txtName.setBounds(550, 80, 175, 25);
+        add(txtName);
+        // Set the window location to center
+        setLocationRelativeTo(null);
+        setVisible(true);
+    }
+    public void actionPerformed(ActionEvent ae) {
+    	
+    }
+    public static void main(String[] args) {
+        // Create an instance of AddCustomer window
+        new AddCustomer();
+    }
+}
+

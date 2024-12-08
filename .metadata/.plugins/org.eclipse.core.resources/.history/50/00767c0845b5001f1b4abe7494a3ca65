@@ -1,0 +1,42 @@
+package managment;
+
+import javax.swing.*;
+import java.awt.*;
+
+public class Home extends JFrame {
+    Home() {
+        // Get the screen dimensions
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int screenWidth = screenSize.width;
+        int screenHeight = screenSize.height;
+
+        // Set the frame to full-screen size
+        setTitle("Home Page");
+        setSize(screenWidth, screenHeight);
+        setLayout(null); // Absolute positioning
+        setLocationRelativeTo(null); // Centering window (though not necessary for full-screen)
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Close on exit
+
+        // Loading and scaling the image
+        ImageIcon backgroundImage = new ImageIcon(getClass().getResource("/managment/images/homeBackground.jpg"));
+        Image img = backgroundImage.getImage();
+        Image scaledImg = img.getScaledInstance(screenWidth, screenHeight, Image.SCALE_SMOOTH);
+        backgroundImage = new ImageIcon(scaledImg);
+
+        // Creating a JLabel with the image
+        JLabel backgroundLbl = new JLabel(backgroundImage);
+        backgroundLbl.setBounds(0, 0, screenWidth, screenHeight); // Match the frame size
+        add(backgroundLbl);
+        JLabel welcomeLbl = new JLabel("Welcome to Croatia Airlines", SwingConstants.CENTER);
+        welcomeLbl.setFont(new Font("Arial", Font.BOLD, 36)); // Font and size
+        welcomeLbl.setForeground(Color.WHITE); // Text color
+        welcomeLbl.setBounds(screenWidth / 4, 20, screenWidth / 2, 50); // Position at top-center
+        backgroundLbl.add(welcomeLbl); // Add the label to the background
+
+        setVisible(true); // Make the frame visible
+    }
+
+    public static void main(String[] args) {
+        new Home();
+    }
+}

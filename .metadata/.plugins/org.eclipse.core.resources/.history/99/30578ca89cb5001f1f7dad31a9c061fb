@@ -1,0 +1,100 @@
+package managment;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import java.sql.*;
+import java.util.Random;
+public class Cancel extends JFrame implements ActionListener{
+	    JTextField txtPnr;
+	    JLabel lblFlightName, cancellation, lblFlightCode, lblDate;
+	    JButton fetchButton, flight;
+     Cancel(){
+    	 Random random = new Random();
+    	 setTitle("Trip Details");
+         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+         setSize(950, 650);
+         setLayout(null);
+         setLocationRelativeTo(null);
+         getContentPane().setBackground(Color.WHITE);
+
+         JLabel heading = new JLabel("Ticket cancellation");
+         heading.setFont(new Font("Arial", Font.BOLD, 28));
+         heading.setForeground(new Color(0, 102, 204));
+         heading.setBounds(325, 20, 300, 30);
+         add(heading);
+         
+         ImageIcon image = new ImageIcon(ClassLoader.getSystemResource("managment/images/cancel.png"));
+         JLabel lblImage = new JLabel(image);
+         lblImage.setBounds(700, 300, 200, 200);
+         add(lblImage);
+         
+         JLabel lblPnr = new JLabel("PNR Number");
+         lblPnr.setBounds(60, 80, 150, 25);
+         lblPnr.setFont(new Font("Tahoma", Font.PLAIN, 16));
+         add(lblPnr);
+         
+         txtPnr = new JTextField();
+         txtPnr.setBounds(220, 80, 150, 25);
+         add(txtPnr);
+         
+         fetchButton = new JButton("Show Details");
+         fetchButton.setBackground(Color.BLACK);
+         fetchButton.setForeground(Color.WHITE);
+         fetchButton.setBounds(380, 80, 120, 25);
+         fetchButton.addActionListener(this);
+         add(fetchButton);
+         
+         JLabel lblname = new JLabel("Name");
+         lblname.setBounds(60, 130, 150, 25);
+         lblname.setFont(new Font("Tahoma", Font.PLAIN, 16));
+         add(lblname);
+         
+         lblFlightName = new JLabel("Flight Name");
+         lblFlightName.setBounds(220, 130, 150, 25);
+         add(lblFlightName);
+         
+         JLabel lblnationality = new JLabel("Cancellation No");
+         lblnationality.setBounds(60, 180, 150, 25);
+         lblnationality.setFont(new Font("Tahoma", Font.PLAIN, 16));
+         add(lblnationality);
+         
+         cancellation = new JLabel("" + random.nextInt(1000000));
+         cancellation.setBounds(220, 180, 150, 25);
+         add(cancellation);
+         
+         JLabel lbladdress = new JLabel("Flight Code");
+         lbladdress.setBounds(60, 230, 150, 25);
+         lbladdress.setFont(new Font("Tahoma", Font.PLAIN, 16));
+         add(lbladdress);
+         
+         lblFlightCode = new JLabel();
+         lblFlightCode.setBounds(220, 230, 150, 25);
+         add(lblFlightCode);
+         
+         JLabel lblGender = new JLabel("Date");
+         lblGender.setBounds(60, 280, 150, 25);
+         lblGender.setFont(new Font("Tahoma", Font.PLAIN, 16));
+         add(lblGender);
+         
+         lblDate = new JLabel();
+         lblDate.setBounds(220, 280, 150, 25);
+         add(lblDate);
+         
+         flight = new JButton("Cancel");
+         flight.setBackground(Color.BLACK);
+         flight.setForeground(Color.WHITE);
+         flight.setBounds(220, 330, 120, 25);
+         flight.addActionListener(this);
+         add(flight);
+         
+         setVisible(true);
+     }
+     public void actionPerformed(ActionEvent ae) {
+    	 
+     }
+	public static void main(String[] args) {
+		new Cancel();
+
+	}
+
+}

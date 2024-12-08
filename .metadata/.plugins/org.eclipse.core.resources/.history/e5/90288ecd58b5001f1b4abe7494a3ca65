@@ -1,0 +1,29 @@
+package managment;
+import java.awt.Color;
+import java.awt.Font;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+
+public class FlightInfo extends JFrame{
+	FlightInfo(){
+		getContentPane().setBackground(Color.WHITE);
+        // Create JFrame
+    	 setTitle("FLIGHT INFORMATION");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(850, 550); 
+        setLayout(null);
+        JLabel heading = new JLabel("PLEASE ADD CUSTOMER DETAILS");
+        heading.setBounds(175, 20, 600, 30);
+        heading.setFont(new Font("Arial", Font.PLAIN, 26));
+        heading.setForeground(Color.RED);
+        add(heading);
+        
+     // Set the window location to center
+        setLocationRelativeTo(null);
+        setVisible(true);
+	}
+	public static void main(String[] args) {
+		
+	}
+
+}

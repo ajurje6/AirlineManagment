@@ -1,0 +1,23 @@
+package managment;
+import javax.swing.*;
+public class Home extends JFrame{
+	Home(){
+		setTitle("Home page");
+		setSize(1280,720);
+		setVisible(true);
+		setLayout(null);// Absolute positioning
+		setLocationRelativeTo(null);// Centering window
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);// Close on exit
+		 // Loading the image
+	     ImageIcon backgroundImage = new ImageIcon(ClassLoader.getSystemResource("managment/images/homeBackground.jpg"));
+
+	     // Creating a JLabel with the image
+	     JLabel backgroundLbl = new JLabel(backgroundImage);
+	     backgroundLbl.setBounds(0, 0, 1200, 700); // Sets size to match the frame
+	     add(backgroundLbl);
+	}
+	public static void main(String[] args) {
+		new Home();
+	}
+
+}

@@ -1,0 +1,219 @@
+package managment;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.sql.*;
+import com.toedter.calendar.JDateChooser;
+import java.util.Random;
+
+public class Booking extends JFrame implements ActionListener {
+
+    private JTextField txtPassengerId;
+    private JLabel lblName, lblNationality, lblAddress, lblGender, lblFlightName, lblFlightCode;
+    private JButton btnBookFlight, btnFetchUser, btnFetchFlights;
+    private Choice choiceSource, choiceDestination;
+    private JDateChooser dcTravelDate;
+
+    public Booking() {
+        getContentPane().setBackground(Color.WHITE);
+        setLayout(null);
+
+        // Heading
+        JLabel lblHeading = new JLabel("Book Flight");
+        lblHeading.setBounds(420, 20, 500, 35);
+        lblHeading.setFont(new Font("Arial", Font.PLAIN, 32));
+        lblHeading.setForeground(Color.BLUE);
+        add(lblHeading);
+        JLabel lblPassengerId = new JLabel("Passenger ID");
+        lblPassengerId.setBounds(60, 80, 150, 25);
+        lblPassengerId.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        add(lblPassengerId);
+        
+        txtPassengerId = new JTextField();
+        txtPassengerId.setBounds(220, 80, 150, 25);
+        add(txtPassengerId);
+        // Fetch User Button
+        btnFetchUser = new JButton("Fetch User");
+        btnFetchUser.setBackground(Color.BLACK);
+        btnFetchUser.setForeground(Color.WHITE);
+        btnFetchUser.setBounds(380, 80, 120, 25);
+        btnFetchUser.addActionListener(this);
+        add(btnFetchUser);
+        
+        createLabelAndField("Name", 130, lblName);
+        createLabelAndField("Nationality", 180, lblNationality);
+        createLabelAndField("Address", 230, lblAddress);
+        createLabelAndField("Gender", 280, lblGender);
+
+        // Source
+        createLabel("Source", 330);
+        choiceSource = new Choice();
+        choiceSource.setBounds(220, 330, 150, 25);
+        add(choiceSource);
+
+        // Destination
+        createLabel("Destination", 380);
+        choiceDestination = new Choice();
+        choiceDestination.setBounds(220, 380, 150, 25);
+        add(choiceDestination);
+
+        // Fetch Flight Button
+        btnFetchFlights = new JButton("Fetch Flights");
+        btnFetchFlights.setBackground(Color.BLACK);
+        btnFetchFlights.setForeground(Color.WHITE);
+        btnFetchFlights.setBounds(380, 380, 120, 25);
+        btnFetchFlights.addActionListener(this);
+        add(btnFetchFlights);
+
+        // Flight Name
+        createLabelAndField("Flight Name", 430, lblFlightName);
+        // Flight Code
+        createLabelAndField("Flight Code", 480, lblFlightCode);
+
+        // Travel Date
+        createLabel("Date of Travel", 530);
+        dcTravelDate = new JDateChooser();
+        dcTravelDate.setBounds(220, 530, 150, 25);
+        add(dcTravelDate);
+
+        // Booking Image
+        
+        // Book Flight Button
+        btnBookFlight = new JButton("Book Flight");
+        btnBookFlight.setBackground(Color.BLACK);
+        btnBookFlight.setForeground(Color.WHITE);
+        btnBookFlight.setBounds(220, 580, 150, 25);
+        btnBookFlight.addActionListener(this);
+        add(btnBookFlight);
+
+        // Populate source and destination
+        populateSourceAndDestination();
+
+        // Frame settings
+        setSize(1100, 700);
+        setLocation(200, 50);
+        setVisible(true);
+    }
+
+    private void createLabel(String text, int y) {
+        JLabel label = new JLabel(text);
+        label.setBounds(60, y, 150, 25);
+        label.setFont(new Font("Arial", Font.PLAIN, 16));
+        add(label);
+    }
+
+    private void createLabelAndField(String text, int y, JLabel field) {
+        createLabel(text, y);
+        field = new JLabel();
+        field.setBounds(220, y, 150, 25);
+        add(field);
+    }
+
+    private void populateSourceAndDestination() {
+        String query = "SELECT DISTINCT source, destination FROM flightinfo";
+        try (Connection conn = DBConnection.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+            while (rs.next()) {
+                choiceSource.add(rs.getString("source"));
+                choiceDestination.add(rs.getString("destination"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent ae) {
+        if (ae.getSource() == btnFetchUser) {
+            fetchUserDetails();
+        } else if (ae.getSource() == btnFetchFlights) {
+            fetchFlightDetails();
+        } else if (ae.getSource() == btnBookFlight) {
+            bookFlight();
+        }
+    }
+
+    private void fetchUserDetails() {
+        String passengerId = txtPassengerId.getText();
+        String query = "SELECT * FROM passenger WHERE passenger_id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setString(1, passengerId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    lblName.setText(rs.getString("name"));
+                    lblNationality.setText(rs.getString("nationality"));
+                    lblAddress.setText(rs.getString("address"));
+                    lblGender.setText(rs.getString("gender"));
+                } else {
+                    JOptionPane.showMessageDialog(this, "Invalid Passenger ID.");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void fetchFlightDetails() {
+        String src = choiceSource.getSelectedItem();
+        String dest = choiceDestination.getSelectedItem();
+        String query = "SELECT * FROM flight WHERE origin = ? AND destination = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setString(1, src);
+            pstmt.setString(2, dest);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    lblFlightName.setText(rs.getString("f_name"));
+                    lblFlightCode.setText(rs.getString("f_code"));
+                } else {
+                    JOptionPane.showMessageDialog(this, "No Flights Found.");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void bookFlight() {
+        Random random = new Random();
+        String passengerId = txtPassengerId.getText();
+        String name = lblName.getText();
+        String nationality = lblNationality.getText();
+        String flightName = lblFlightName.getText();
+        String flightCode = lblFlightCode.getText();
+        String src = choiceSource.getSelectedItem();
+        String dest = choiceDestination.getSelectedItem();
+        String travelDate = ((JTextField) dcTravelDate.getDateEditor().getUiComponent()).getText();
+
+        String query = "INSERT INTO reservation (pnr, ticket_id, passenger_id, name, nationality, flight_name, flight_code, source, destination, travel_date) " +
+                       "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setString(1, "PNR-" + random.nextInt(1000000));
+            pstmt.setString(2, "TIC-" + random.nextInt(10000));
+            pstmt.setString(3, passengerId);
+            pstmt.setString(4, name);
+            pstmt.setString(5, nationality);
+            pstmt.setString(6, flightName);
+            pstmt.setString(7, flightCode);
+            pstmt.setString(8, src);
+            pstmt.setString(9, dest);
+            pstmt.setString(10, travelDate);
+            pstmt.executeUpdate();
+
+            JOptionPane.showMessageDialog(this, "Ticket Booked Successfully.");
+            setVisible(false);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) {
+        new Booking();
+    }
+}
+
+

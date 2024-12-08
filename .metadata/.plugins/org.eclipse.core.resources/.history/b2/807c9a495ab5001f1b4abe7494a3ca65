@@ -1,0 +1,37 @@
+package managment;
+import java.awt.*;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+
+public class FlightInfo extends JFrame{
+	FlightInfo(){
+		getContentPane().setBackground(Color.WHITE);
+        // Create JFrame
+    	setTitle("FLIGHT INFORMATION");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(950, 650); 
+        setLayout(null);
+        JLabel heading = new JLabel("Flight information");
+        heading.setBounds(375, 20, 300, 30);
+        heading.setFont(new Font("Arial", Font.PLAIN, 20));
+        heading.setForeground(Color.BLUE);
+        add(heading);
+        
+     // Table setup
+        String[] columns = {"Flight ID", "Flight Code", "Flight Name", "Origin", "Destination"};
+
+        // Create the JTable with column headers and empty data initially
+        DefaultTableModel model = new DefaultTableModel(columns, 0);
+        JTable flightTable = new JTable(model);
+        JScrollPane scrollPane = new JScrollPane(flightTable);
+        scrollPane.setBounds(50, 80, 850, 450);
+        add(scrollPane);
+     // Set the window location to center
+        setLocationRelativeTo(null);
+        setVisible(true);
+	}
+	public static void main(String[] args) {
+		new FlightInfo();
+	}
+
+}

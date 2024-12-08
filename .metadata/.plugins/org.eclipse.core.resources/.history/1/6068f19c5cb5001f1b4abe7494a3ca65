@@ -1,0 +1,88 @@
+package managment;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.sql.*;
+import com.toedter.calendar.JDateChooser;
+import java.util.*;
+public class Booking extends JFrame{
+	JLabel tfname, tfnationality, tfaddress, labelgender, labelfname, labelfcode;
+    JButton bookflight, fetchButton, flight;
+    Choice source, destination;
+    JDateChooser dcdate;
+	Booking(){
+		  getContentPane().setBackground(Color.WHITE);
+		  setLayout(null);
+		        
+		        JLabel heading = new JLabel("Book Flight");
+		        heading.setBounds(420, 20, 500, 35);
+		        heading.setFont(new Font("Tahoma", Font.PLAIN, 32));
+		        heading.setForeground(Color.BLUE);
+		        add(heading);
+		        fetchButton = new JButton("Fetch User");
+		        fetchButton.setBackground(Color.BLACK);
+		        fetchButton.setForeground(Color.WHITE);
+		        fetchButton.setBounds(380, 80, 120, 25);
+		       
+		        add(fetchButton);
+		        
+		        JLabel lblname = new JLabel("Name");
+		        lblname.setBounds(60, 130, 150, 25);
+		        lblname.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		        add(lblname);
+		        
+		        tfname = new JLabel();
+		        tfname.setBounds(220, 130, 150, 25);
+		        add(tfname);
+		        
+		        JLabel lblnationality = new JLabel("Nationality");
+		        lblnationality.setBounds(60, 180, 150, 25);
+		        lblnationality.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		        add(lblnationality);
+		        
+		        tfnationality = new JLabel();
+		        tfnationality.setBounds(220, 180, 150, 25);
+		        add(tfnationality);
+		        
+		        JLabel lbladdress = new JLabel("Address");
+		        lbladdress.setBounds(60, 230, 150, 25);
+		        lbladdress.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		        add(lbladdress);
+		        
+		        tfaddress = new JLabel();
+		        tfaddress.setBounds(220, 230, 150, 25);
+		        add(tfaddress);
+		        
+		        JLabel lblgender = new JLabel("Gender");
+		        lblgender.setBounds(60, 280, 150, 25);
+		        lblgender.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		        add(lblgender);
+		        
+		        labelgender = new JLabel("Gender");
+		        labelgender.setBounds(220, 280, 150, 25);
+		        add(labelgender);
+		        
+		        JLabel lblsource = new JLabel("Source");
+		        lblsource.setBounds(60, 330, 150, 25);
+		        lblsource.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		        add(lblsource);
+		        
+		        source = new Choice();
+		        source.setBounds(220, 330, 150, 25);       
+		        add(source);
+		        
+		        JLabel lbldest = new JLabel("Destination");
+		        lbldest.setBounds(60, 380, 150, 25);
+		        lbldest.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		        add(lbldest);
+		        
+		        destination = new Choice();
+		        destination.setBounds(220, 380, 150, 25);       
+		        add(destination);	        
+	}
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+}

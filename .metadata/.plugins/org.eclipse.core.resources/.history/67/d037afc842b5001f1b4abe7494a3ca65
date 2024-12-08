@@ -1,0 +1,13 @@
+package managment;
+import javax.swing.*;
+public class Home extends JFrame{
+	Home(){
+		setTitle("Home page");
+		setSize(800,600);
+		setVisible(true);
+	}
+	public static void main(String[] args) {
+		new Home();
+	}
+
+}

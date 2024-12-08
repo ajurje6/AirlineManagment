@@ -1,0 +1,195 @@
+package managment;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.sql.*;
+import com.toedter.calendar.JDateChooser;
+
+public class Booking extends JFrame implements ActionListener {
+    JLabel tfname, tfnationality, tfaddress, labelgender;
+    JButton bookflight, fetchButton;
+    Choice source, destination;
+    JDateChooser dcdate;
+
+    Booking() {
+        getContentPane().setBackground(Color.WHITE);
+        setLayout(null);
+
+        // Heading
+        JLabel heading = new JLabel("Book Flight");
+        heading.setBounds(420, 20, 500, 35);
+        heading.setFont(new Font("Tahoma", Font.PLAIN, 32));
+        heading.setForeground(Color.BLUE);
+        add(heading);
+
+        // Fetch User Button
+        fetchButton = new JButton("Fetch User");
+        fetchButton.setBackground(Color.BLACK);
+        fetchButton.setForeground(Color.WHITE);
+        fetchButton.setBounds(380, 80, 120, 25);
+        fetchButton.addActionListener(this); // Add action listener
+        add(fetchButton);
+
+        // Labels and fields
+        createLabel("Name", 60, 130);
+        tfname = createValueLabel(220, 130);
+
+        createLabel("Nationality", 60, 180);
+        tfnationality = createValueLabel(220, 180);
+
+        createLabel("Address", 60, 230);
+        tfaddress = createValueLabel(220, 230);
+
+        createLabel("Gender", 60, 280);
+        labelgender = createValueLabel(220, 280);
+
+        createLabel("Source", 60, 330);
+        source = new Choice();
+        source.setBounds(220, 330, 150, 25);
+        add(source);
+
+        createLabel("Destination", 60, 380);
+        destination = new Choice();
+        destination.setBounds(220, 380, 150, 25);
+        add(destination);
+
+        // Calendar for Date
+        createLabel("Travel Date", 60, 430);
+        dcdate = new JDateChooser();
+        dcdate.setBounds(220, 430, 150, 25);
+        add(dcdate);
+
+        // Book Flight Button
+        bookflight = new JButton("Book Flight");
+        bookflight.setBackground(Color.BLACK);
+        bookflight.setForeground(Color.WHITE);
+        bookflight.setBounds(220, 500, 150, 30);
+        bookflight.addActionListener(this); // Add action listener
+        add(bookflight);
+
+        // Populate source and destination choices
+        populateFlightChoices();
+
+        // Frame settings
+        setTitle("Flight Booking");
+        setSize(950, 650);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setVisible(true);
+    }
+
+    // Method to create labels
+    private JLabel createLabel(String text, int x, int y) {
+        JLabel label = new JLabel(text);
+        label.setBounds(x, y, 150, 25);
+        label.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        add(label);
+        return label;
+    }
+
+    // Method to create value labels
+    private JLabel createValueLabel(int x, int y) {
+        JLabel label = new JLabel();
+        label.setBounds(x, y, 150, 25);
+        add(label);
+        return label;
+    }
+
+    // Populate source and destination choices from the database
+    private void populateFlightChoices() {
+        String query = "SELECT DISTINCT origin, destination FROM flightinfo";
+        try (Connection conn = DBConnection.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+            while (rs.next()) {
+                source.add(rs.getString("origin"));
+                destination.add(rs.getString("destination"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error fetching flight data.");
+        }
+    }
+
+    // Action handler
+    @Override
+    public void actionPerformed(ActionEvent ae) {
+        if (ae.getSource() == fetchButton) {
+            fetchUserDetails();
+        } else if (ae.getSource() == bookflight) {
+            bookFlight();
+        }
+    }
+
+    // Fetch user details from the database
+    private void fetchUserDetails() {
+        String userId = JOptionPane.showInputDialog(this, "Enter User ID:");
+        if (userId != null && !userId.trim().isEmpty()) {
+            String query = "SELECT * FROM passenger WHERE id = ?";
+            try (Connection conn = DBConnection.getConnection();
+                 PreparedStatement pstmt = conn.prepareStatement(query)) {
+                pstmt.setString(1, userId);
+                try (ResultSet rs = pstmt.executeQuery()) {
+                    if (rs.next()) {
+                        tfname.setText(rs.getString("name"));
+                        tfnationality.setText(rs.getString("nationality"));
+                        tfaddress.setText(rs.getString("address"));
+                        labelgender.setText(rs.getString("gender"));
+                    } else {
+                        JOptionPane.showMessageDialog(this, "User not found!");
+                    }
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Error fetching user details.");
+            }
+        }
+    }
+
+    // Book a flight and save the booking details
+    private void bookFlight() {
+        String name = tfname.getText();
+        String nationality = tfnationality.getText();
+        String address = tfaddress.getText();
+        String gender = labelgender.getText();
+        String flightSource = source.getSelectedItem();
+        String flightDestination = destination.getSelectedItem();
+        java.util.Date travelDate = dcdate.getDate();
+
+        // Validate inputs
+        if (name.isEmpty() || flightSource == null || flightDestination == null || travelDate == null) {
+            JOptionPane.showMessageDialog(this, "Please fill all fields!");
+            return;
+        }
+
+        // Confirm booking
+        int confirm = JOptionPane.showConfirmDialog(this, "Confirm booking?", "Confirmation", JOptionPane.YES_NO_OPTION);
+        if (confirm != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        // Save booking details
+        String query = "INSERT INTO bookings (name, nationality, address, gender, source, destination, travel_date) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setString(1, name);
+            pstmt.setString(2, nationality);
+            pstmt.setString(3, address);
+            pstmt.setString(4, gender);
+            pstmt.setString(5, flightSource);
+            pstmt.setString(6, flightDestination);
+            pstmt.setDate(7, new java.sql.Date(travelDate.getTime()));
+            pstmt.executeUpdate();
+            JOptionPane.showMessageDialog(this, "Flight booked successfully!");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error booking flight.");
+        }
+    }
+
+    public static void main(String[] args) {
+        new Booking();
+    }
+}
+

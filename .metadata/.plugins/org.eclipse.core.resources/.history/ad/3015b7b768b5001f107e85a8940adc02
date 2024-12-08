@@ -1,0 +1,56 @@
+package managment;
+import java.awt.*;
+import javax.swing.*;
+import java.awt.event.*;
+import java.sql.*;
+import com.toedter.calendar.JDateChooser;
+import java.util.Random;
+
+public class Booking extends JFrame implements ActionListener {
+
+    private JTextField txtPassengerId;
+    private JLabel lblName, lblNationality, lblAddress, lblGender, lblFlightName, lblFlightCode;
+    private JButton btnBookFlight, btnFetchUser, btnFetchFlights;
+    private Choice choiceSource, choiceDestination;
+    private JDateChooser dcTravelDate;
+
+    public Booking() {
+        getContentPane().setBackground(Color.WHITE);
+        setLayout(null);
+        setTitle("Ticket Booking");
+        setSize(800,600);
+        setLocationRelativeTo(null);
+        setVisible(true);
+        // Heading
+        JLabel lblHeading = new JLabel("Book Flight");
+        lblHeading.setBounds(300, 20, 300, 35);
+        lblHeading.setFont(new Font("Arial", Font.PLAIN, 32));
+        lblHeading.setForeground(Color.BLUE);
+        add(lblHeading);
+        
+        JLabel lblPassengerId = new JLabel("Passenger ID");
+        lblPassengerId.setBounds(60, 80, 150, 25);
+        lblPassengerId.setFont(new Font("Arial", Font.PLAIN, 16));
+        add(lblPassengerId);
+        
+        txtPassengerId = new JTextField();
+        txtPassengerId.setBounds(200, 80, 150, 25);
+        add(txtPassengerId);
+        
+        btnFetchUser = new JButton("Fetch User");
+        btnFetchUser.setBackground(Color.RED);
+        btnFetchUser.setForeground(Color.WHITE);
+        btnFetchUser.setBounds(340, 80, 120, 25);
+        btnFetchUser.addActionListener(this);
+        add(btnFetchUser);
+        
+        
+    }
+
+    public void actionPerformed(ActionEvent ae) {}
+    public static void main(String[] args) {
+        new Booking();
+    }
+}
+
+
