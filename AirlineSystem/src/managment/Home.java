@@ -52,11 +52,9 @@ public class Home extends JFrame implements ActionListener {
         JMenu customerMenu = createColoredMenu("Customer", Color.BLUE);
 
         // Creating menu items for "Details" menu
-        JMenuItem reservationMenuItem = new JMenuItem("Reservation Details");
         JMenuItem tripDetailsMenuItem = new JMenuItem("Trip Details");
 
         // Adding menu items to "Details" menu
-        detailsMenu.add(reservationMenuItem);
         detailsMenu.add(tripDetailsMenuItem);
 
         // Creating menu items for "Ticket" menu
@@ -96,6 +94,7 @@ public class Home extends JFrame implements ActionListener {
         tripDetailsMenuItem.addActionListener(this);
         bookingMenuItem.addActionListener(this);
         cancelTicketMenuItem.addActionListener(this);
+        boardingPassMenuItem.addActionListener(this);
         return menuBar;
     }
 
@@ -119,9 +118,11 @@ public class Home extends JFrame implements ActionListener {
             new Booking();
         } else if (text.equals("Trip Details")) {
             new TripDetails();
-    } else if (text.equals("Cancel Ticket")) {
+        } else if (text.equals("Cancel Ticket")) {
         new Cancel();
-    }
+        }else if (text.equals("Boarding Pass")) {
+        new BoardingPass();
+        }
     }
 
     public static void main(String[] args) {

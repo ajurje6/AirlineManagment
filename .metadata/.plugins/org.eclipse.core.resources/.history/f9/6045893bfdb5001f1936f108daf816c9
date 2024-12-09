@@ -1,0 +1,31 @@
+package managment;
+import java.awt.*;
+import javax.swing.*;
+import java.awt.event.*;
+import java.sql.*;
+public class BoardingPass extends JFrame {
+		BoardingPass(){
+			getContentPane().setBackground(Color.WHITE);
+		    setLayout(null);
+			setSize(700,350);
+			setTitle("Boarding Pass");
+			setLocationRelativeTo(null);
+			setVisible(true);
+			ImageIcon image = new ImageIcon(ClassLoader.getSystemResource("managment/images/pass.png"));
+	        JLabel lblImage = new JLabel(image);
+	        lblImage.setBounds(200, 100, 300, 25);
+	        add(lblImage);
+	        JLabel heading = new JLabel("BOARDING PASS");
+	        heading.setBounds(300, 10, 450, 35);
+	        heading.setFont(new Font("Arial", Font.BOLD, 32));
+	        add(heading);
+		}
+		
+		public void actionPerformed(ActionEvent ae){
+			
+		}
+	public static void main(String[] args) {
+		new BoardingPass();
+	}
+
+}

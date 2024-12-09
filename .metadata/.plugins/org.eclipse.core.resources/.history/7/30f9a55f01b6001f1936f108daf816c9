@@ -1,0 +1,150 @@
+package managment;
+
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.sql.*;
+
+public class ReservationDetails extends JFrame implements ActionListener {
+    private JTable table;
+    private JTextField txtPnr;
+    private JButton show;
+    private Connection conn;
+
+    public ReservationDetails() {
+        // Establish database connection
+        try {
+            conn = DBConnection.getConnection();
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Database connection failed.");
+            System.exit(1);
+        }
+
+        // JFrame setup
+        setTitle("Reservation Details");
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setSize(1000, 700); // Adjusted size for better display
+        setLayout(null);
+        setLocationRelativeTo(null);
+        getContentPane().setBackground(Color.WHITE);
+
+        JLabel heading = new JLabel("Reservation Details");
+        heading.setFont(new Font("Arial", Font.BOLD, 28));
+        heading.setForeground(new Color(0, 102, 204));
+        heading.setBounds(350, 20, 400, 30);
+        add(heading);
+
+        JLabel lblPnr = new JLabel("PNR Number:");
+        lblPnr.setFont(new Font("Arial", Font.PLAIN, 18));
+        lblPnr.setBounds(50, 100, 200, 25);
+        add(lblPnr);
+
+        txtPnr = new JTextField();
+        txtPnr.setBounds(200, 100, 200, 30);
+        txtPnr.setFont(new Font("Arial", Font.PLAIN, 16));
+        add(txtPnr);
+
+        show = new JButton("Show Details");
+        show.setBackground(Color.RED);
+        show.setForeground(Color.WHITE);
+        show.setFont(new Font("Arial", Font.BOLD, 16));
+        show.setBounds(420, 100, 150, 30);
+        show.addActionListener(this);
+        add(show);
+
+        // Table to display results
+        table = new JTable();
+        table.setFont(new Font("Arial", Font.PLAIN, 14));
+        table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 16));
+        JScrollPane jsp = new JScrollPane(table);
+        jsp.setBounds(50, 200, 900, 400);
+        add(jsp);
+
+        setVisible(true);
+    }
+
+    public void actionPerformed(ActionEvent ae) {
+        if (ae.getSource() == show) {
+            fetchReservationDetails();
+        }
+    }
+
+    private void fetchReservationDetails() {
+        String pnr = txtPnr.getText().trim();
+
+        if (pnr.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter a valid PNR number.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        String query = """
+            SELECT 
+                r.name AS 'Reservation Name',
+                r.surname AS 'Reservation Surname',
+                r.nationality AS 'Reservation Nationality',
+                r.phone AS 'Reservation Phone',
+                r.address AS 'Reservation Address',
+                r.origin AS 'Reservation Origin',
+                r.destination AS 'Reservation Destination',
+                r.date AS 'Reservation Date',
+                fi.flight_name AS 'Flight Name',
+                fi.flight_code AS 'Flight Code',
+                c.cancel_id AS 'Cancel ID',
+                c.name AS 'Cancel Name',
+                c.surname AS 'Cancel Surname',
+                c.cancel_number AS 'Cancel Number',
+                c.date AS 'Cancel Date',
+                p.name AS 'Passenger Name',
+                p.surname AS 'Passenger Surname',
+                p.gender AS 'Passenger Gender',
+                p.nationality AS 'Passenger Nationality',
+                p.phone AS 'Passenger Phone',
+                p.address AS 'Passenger Address'
+            FROM reservations r
+            LEFT JOIN cancel c ON r.PNR = c.PNR
+            LEFT JOIN flightinfo fi ON r.flight_code = fi.flight_code
+            LEFT JOIN passenger p ON r.name = p.name AND r.surname = p.surname
+            WHERE r.PNR = ?
+        """;
+
+        try (PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setString(1, pnr);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (!rs.isBeforeFirst()) { // No data found
+                    JOptionPane.showMessageDialog(this, "No details found for the entered PNR.", "No Data", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    DefaultTableModel model = (DefaultTableModel) table.getModel();
+
+                    // Initialize table model with column names if empty
+                    if (model.getColumnCount() == 0) {
+                        ResultSetMetaData metaData = rs.getMetaData();
+                        int columnCount = metaData.getColumnCount();
+                        String[] columnNames = new String[columnCount];
+                        for (int i = 1; i <= columnCount; i++) {
+                            columnNames[i - 1] = metaData.getColumnName(i);
+                        }
+                        model.setColumnIdentifiers(columnNames);
+                    }
+
+                    
+                    while (rs.next()) {
+                        Object[] rowData = new Object[model.getColumnCount()];
+                        for (int i = 0; i < rowData.length; i++) {
+                            rowData[i] = rs.getObject(i + 1);
+                        }
+                        model.addRow(rowData);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "An error occurred while fetching details.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public static void main(String[] args) {
+        new ReservationDetails();
+    }
+}

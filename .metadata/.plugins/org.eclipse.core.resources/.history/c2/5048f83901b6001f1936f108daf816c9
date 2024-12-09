@@ -1,0 +1,78 @@
+package managment;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.sql.*;
+public class ReservationDetails extends JFrame implements ActionListener {
+	 private JTable table;
+	 private JTextField txtPnr;
+	 private JButton show;
+	 private Connection conn;
+	 ReservationDetails(){
+		 // Establish database connection
+	        try {
+	            conn = DBConnection.getConnection();
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            JOptionPane.showMessageDialog(null, "Database connection failed.");
+	            System.exit(1);
+	        }
+
+	        // JFrame setup
+	        setTitle("Reservation Details");
+	        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+	        setSize(950, 650);
+	        setLayout(null);
+	        setLocationRelativeTo(null);
+	        getContentPane().setBackground(Color.WHITE);
+
+	        JLabel heading = new JLabel("Reservation Details");
+	        heading.setFont(new Font("Arial", Font.BOLD, 28));
+	        heading.setForeground(new Color(0, 102, 204));
+	        heading.setBounds(375, 20, 300, 30);
+	        add(heading);
+
+	        JLabel lblPnr = new JLabel("PNR Number:");
+	        lblPnr.setFont(new Font("Arial", Font.PLAIN, 18));
+	        lblPnr.setBounds(50, 100, 200, 25);
+	        add(lblPnr);
+
+	        txtPnr = new JTextField();
+	        txtPnr.setBounds(200, 100, 200, 30);
+	        txtPnr.setFont(new Font("Arial", Font.PLAIN, 16));
+	        add(txtPnr);
+
+	        show = new JButton("Show Details");
+	        show.setBackground(Color.RED);
+	        show.setForeground(Color.WHITE);
+	        show.setFont(new Font("Arial", Font.BOLD, 16));
+	        show.setBounds(420, 100, 150, 30);
+	        show.addActionListener(this);
+	        add(show);
+
+	        // Table to display results
+	        table = new JTable();
+	        table.setFont(new Font("Arial", Font.PLAIN, 14));
+	        table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 16));
+	        JScrollPane jsp = new JScrollPane(table);
+	        jsp.setBounds(50, 200, 850, 350);
+	        add(jsp);
+
+	        setVisible(true);
+		 }
+	 public void actionPerformed(ActionEvent ae) {
+	        if (ae.getSource() == show) {
+	            fetchReservationDetails();
+	        }
+	    }
+	 
+	 private void fetchReservationDetails() {
+		 
+	 }
+	 
+	public static void main(String[] args) {
+		new ReservationDetails();
+	}
+
+}

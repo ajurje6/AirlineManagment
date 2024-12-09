@@ -1,0 +1,39 @@
+package managment;
+
+import java.awt.*;
+import javax.swing.*;
+
+public class BoardingPass extends JFrame {
+    BoardingPass() {
+        // Set up the frame
+        setTitle("Boarding Pass");
+        setSize(700, 350);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+        getContentPane().setBackground(Color.WHITE);
+        setLayout(null);
+
+        // Add the heading
+        JLabel heading = new JLabel("BOARDING PASS");
+        heading.setBounds(200, 10, 400, 35);
+        heading.setFont(new Font("Arial", Font.BOLD, 32));
+        heading.setForeground(Color.RED);
+        add(heading);
+
+        // Add the image
+        ImageIcon image = new ImageIcon(ClassLoader.getSystemResource("managment/images/pass.png"));
+        if (image.getImageLoadStatus() == MediaTracker.COMPLETE) {
+            JLabel lblImage = new JLabel(image);
+            lblImage.setBounds(400, 300, 300, 200);
+            add(lblImage);
+        } else {
+            System.err.println("Image not found or failed to load.");
+        }
+
+        setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        new BoardingPass();
+    }
+}

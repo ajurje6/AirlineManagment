@@ -6,6 +6,8 @@ import java.awt.event.*;
 import java.sql.*;
 import com.toedter.calendar.JDateChooser;
 import java.util.Random;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Booking extends JFrame implements ActionListener {
 
@@ -19,26 +21,26 @@ public class Booking extends JFrame implements ActionListener {
     private Connection conn;
 
     public Booking() {
-    	try {
-    	    conn = DBConnection.getConnection(); // Initialize connection once
-    	} catch (Exception e) { // Catch general exceptions
-    	    e.printStackTrace();
-    	    JOptionPane.showMessageDialog(null, "Database connection failed.");
-    	    System.exit(1);
-    	}
+        try {
+            conn = DBConnection.getConnection(); // Initialize connection once
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Database connection failed.");
+            System.exit(1);
+        }
 
         getContentPane().setBackground(Color.WHITE);
         setLayout(null);
 
         JLabel heading = new JLabel("Book Flight");
         heading.setBounds(300, 20, 500, 35);
-        heading.setFont(new Font("Tahoma", Font.BOLD, 32));
+        heading.setFont(new Font("Arial", Font.BOLD, 32));
         heading.setForeground(Color.BLUE);
         add(heading);
 
         JLabel lblPassengerId = new JLabel("Passenger ID");
         lblPassengerId.setBounds(60, 80, 150, 25);
-        lblPassengerId.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        lblPassengerId.setFont(new Font("Arial", Font.PLAIN, 16));
         add(lblPassengerId);
 
         txtPassengerId = new JTextField();
@@ -54,7 +56,7 @@ public class Booking extends JFrame implements ActionListener {
 
         JLabel lblname = new JLabel("Name");
         lblname.setBounds(60, 130, 150, 25);
-        lblname.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        lblname.setFont(new Font("Arial", Font.PLAIN, 16));
         add(lblname);
 
         tfname = new JLabel();
@@ -63,7 +65,7 @@ public class Booking extends JFrame implements ActionListener {
 
         JLabel lblsurname = new JLabel("Surname");
         lblsurname.setBounds(60, 160, 150, 25);
-        lblsurname.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        lblsurname.setFont(new Font("Arial", Font.PLAIN, 16));
         add(lblsurname);
 
         tfsurname = new JLabel();
@@ -72,7 +74,7 @@ public class Booking extends JFrame implements ActionListener {
 
         JLabel lblphone = new JLabel("Phone");
         lblphone.setBounds(60, 190, 150, 25);
-        lblphone.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        lblphone.setFont(new Font("Arial", Font.PLAIN, 16));
         add(lblphone);
 
         tfphone = new JLabel();
@@ -81,7 +83,7 @@ public class Booking extends JFrame implements ActionListener {
 
         JLabel lblnationality = new JLabel("Nationality");
         lblnationality.setBounds(60, 220, 150, 25);
-        lblnationality.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        lblnationality.setFont(new Font("Arial", Font.PLAIN, 16));
         add(lblnationality);
 
         tfnationality = new JLabel();
@@ -90,7 +92,7 @@ public class Booking extends JFrame implements ActionListener {
 
         JLabel lbladdress = new JLabel("Address");
         lbladdress.setBounds(60, 250, 150, 25);
-        lbladdress.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        lbladdress.setFont(new Font("Arial", Font.PLAIN, 16));
         add(lbladdress);
 
         tfaddress = new JLabel();
@@ -99,7 +101,7 @@ public class Booking extends JFrame implements ActionListener {
 
         JLabel lblsource = new JLabel("Source");
         lblsource.setBounds(60, 300, 150, 25);
-        lblsource.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        lblsource.setFont(new Font("Arial", Font.PLAIN, 16));
         add(lblsource);
 
         sourceChoice = new Choice();
@@ -108,7 +110,7 @@ public class Booking extends JFrame implements ActionListener {
 
         JLabel lbldestination = new JLabel("Destination");
         lbldestination.setBounds(60, 330, 150, 25);
-        lbldestination.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        lbldestination.setFont(new Font("Arial", Font.PLAIN, 16));
         add(lbldestination);
 
         destinationChoice = new Choice();
@@ -119,7 +121,7 @@ public class Booking extends JFrame implements ActionListener {
 
         JLabel lbldate = new JLabel("Date of Travel");
         lbldate.setBounds(60, 360, 150, 25);
-        lbldate.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        lbldate.setFont(new Font("Arial", Font.PLAIN, 16));
         add(lbldate);
 
         dcdate = new JDateChooser();
@@ -128,24 +130,22 @@ public class Booking extends JFrame implements ActionListener {
 
         JLabel lblfcode = new JLabel("Flight Code");
         lblfcode.setBounds(60, 400, 150, 25);
-        lblfcode.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        lblfcode.setFont(new Font("Arial", Font.PLAIN, 16));
         add(lblfcode);
 
         labelfcode = new JLabel();
         labelfcode.setBounds(220, 400, 150, 25);
         add(labelfcode);
 
-        // Adding flight name display
         JLabel lblflightname = new JLabel("Flight Name");
         lblflightname.setBounds(60, 430, 150, 25);
-        lblflightname.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        lblflightname.setFont(new Font("Arial", Font.PLAIN, 16));
         add(lblflightname);
 
         labelflightname = new JLabel();
         labelflightname.setBounds(220, 430, 150, 25);
         add(labelflightname);
 
-        // Button to fetch flight details
         fetchFlightButton = new JButton("Fetch Flight");
         fetchFlightButton.setBackground(Color.BLACK);
         fetchFlightButton.setForeground(Color.WHITE);
@@ -159,6 +159,7 @@ public class Booking extends JFrame implements ActionListener {
         bookflight.setBounds(220, 480, 150, 25);
         bookflight.addActionListener(this);
         add(bookflight);
+
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(800, 600);
         setLocation(200, 100);
@@ -166,14 +167,25 @@ public class Booking extends JFrame implements ActionListener {
     }
 
     private void populateChoices() {
+        Set<String> uniqueSources = new HashSet<>();
+        Set<String> uniqueDestinations = new HashSet<>();
+
         try (Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery("SELECT DISTINCT origin, destination FROM flightinfo")) {
             while (rs.next()) {
-                sourceChoice.add(rs.getString("origin"));
-                destinationChoice.add(rs.getString("destination"));
+                uniqueSources.add(rs.getString("origin"));
+                uniqueDestinations.add(rs.getString("destination"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+
+        for (String source : uniqueSources) {
+            sourceChoice.add(source);
+        }
+
+        for (String destination : uniqueDestinations) {
+            destinationChoice.add(destination);
         }
     }
 

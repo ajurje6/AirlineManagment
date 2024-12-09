@@ -1,25 +1,40 @@
 package managment;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
+
 public class AddCustomer extends JFrame implements ActionListener {
-	JTextField txtName, txtSurname, txtNationality, txtAddress,txtPhone;
+    JTextField txtName, txtSurname, txtNationality, txtAddress, txtPhone;
     JRadioButton rbMale, rbFemale;
-    // Constructor to initialize the window
+    private Connection conn;
+
     public AddCustomer() {
-    	 getContentPane().setBackground(Color.WHITE);
-        // Create JFrame
-    	 setTitle("ADD CUSTOMER");
+        try {
+            // Initialize the connection once when the class is created
+            conn = DBConnection.getConnection(); // Get the connection from DBConnection class
+            System.out.println("Connection initialized in AddCustomer constructor.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Database connection failed.");
+            System.exit(1); // Exit the application if the connection fails
+        }
+
+        // UI setup
+        getContentPane().setBackground(Color.WHITE);
+        setTitle("ADD CUSTOMER");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(850, 550); 
+        setSize(850, 550);
         setLayout(null);
+
         JLabel heading = new JLabel("PLEASE ADD CUSTOMER DETAILS");
         heading.setBounds(175, 20, 600, 30);
         heading.setFont(new Font("Arial", Font.PLAIN, 26));
         heading.setForeground(Color.RED);
         add(heading);
-        //NAME
+
+        // Name
         JLabel lblName = new JLabel("Name");
         lblName.setBounds(400, 90, 150, 25);
         lblName.setFont(new Font("Arial", Font.PLAIN, 20));
@@ -27,7 +42,8 @@ public class AddCustomer extends JFrame implements ActionListener {
         txtName = new JTextField();
         txtName.setBounds(550, 90, 175, 25);
         add(txtName);
-        //SURNAME
+
+        // Surname
         JLabel lblSurname = new JLabel("Surname");
         lblSurname.setBounds(400, 150, 150, 25);
         lblSurname.setFont(new Font("Arial", Font.PLAIN, 20));
@@ -35,7 +51,8 @@ public class AddCustomer extends JFrame implements ActionListener {
         txtSurname = new JTextField();
         txtSurname.setBounds(550, 150, 175, 25);
         add(txtSurname);
-        //NATIONALITY
+
+        // Nationality
         JLabel lblNationality = new JLabel("Nationality");
         lblNationality.setBounds(400, 210, 150, 25);
         lblNationality.setFont(new Font("Arial", Font.PLAIN, 20));
@@ -43,7 +60,8 @@ public class AddCustomer extends JFrame implements ActionListener {
         txtNationality = new JTextField();
         txtNationality.setBounds(550, 210, 175, 25);
         add(txtNationality);
-        //ADDRESS
+
+        // Address
         JLabel lblAddress = new JLabel("Address");
         lblAddress.setBounds(400, 270, 150, 25);
         lblAddress.setFont(new Font("Arial", Font.PLAIN, 20));
@@ -51,7 +69,8 @@ public class AddCustomer extends JFrame implements ActionListener {
         txtAddress = new JTextField();
         txtAddress.setBounds(550, 270, 175, 25);
         add(txtAddress);
-        //PHONE
+
+        // Phone
         JLabel lblPhone = new JLabel("Phone");
         lblPhone.setBounds(400, 330, 150, 25);
         lblPhone.setFont(new Font("Arial", Font.PLAIN, 20));
@@ -59,76 +78,72 @@ public class AddCustomer extends JFrame implements ActionListener {
         txtPhone = new JTextField();
         txtPhone.setBounds(550, 330, 175, 25);
         add(txtPhone);
-        //GENDER
+
+        // Gender
         JLabel lblGender = new JLabel("Gender");
         lblGender.setBounds(400, 390, 150, 25);
         lblGender.setFont(new Font("Arial", Font.PLAIN, 20));
         add(lblGender);
-        ButtonGroup gendergroup = new ButtonGroup();
-        
+        ButtonGroup genderGroup = new ButtonGroup();
+
         rbMale = new JRadioButton("Male");
         rbMale.setBounds(550, 390, 70, 25);
         rbMale.setBackground(Color.WHITE);
         add(rbMale);
-        
+
         rbFemale = new JRadioButton("Female");
         rbFemale.setBounds(650, 390, 70, 25);
         rbFemale.setBackground(Color.WHITE);
         add(rbFemale);
-        
-        gendergroup.add(rbMale);
-        gendergroup.add(rbFemale);
-        //CONFIRM
+
+        genderGroup.add(rbMale);
+        genderGroup.add(rbFemale);
+
+        // Confirm Button
         JButton confirm = new JButton("CONFIRM");
         confirm.setBackground(Color.RED);
         confirm.setForeground(Color.WHITE);
         confirm.setBounds(475, 450, 150, 30);
         confirm.addActionListener(this);
         add(confirm);
+
         ImageIcon image = new ImageIcon(ClassLoader.getSystemResource("managment/images/logo.png"));
-        JLabel lblimage = new JLabel(image);
-        lblimage.setBounds(75, 150, 280, 300);
-        add(lblimage);
-        // Set the window location to center
+        JLabel lblImage = new JLabel(image);
+        lblImage.setBounds(75, 150, 280, 300);
+        add(lblImage);
+
         setLocationRelativeTo(null);
         setVisible(true);
-        
     }
-    public void actionPerformed(ActionEvent ae) {
-    	 String name = txtName.getText();
-    	 String surname = txtSurname.getText();
-         String nationality = txtNationality.getText();
-         String address = txtAddress.getText();
-         String phone = txtPhone.getText();
-         String gender = null;
-         if (rbMale.isSelected()) {
-             gender = "Male";
-         } else {
-             gender = "Female";
-         }
-         DBConnection Ac = new DBConnection();
-         String query = "INSERT INTO passenger (name, surname, nationality, phone, gender, address) VALUES (?, ?, ?, ?, ?, ?)";
-         try (PreparedStatement pstmt = Ac.getConnection().prepareStatement(query)) {
-             pstmt.setString(1, name);
-             pstmt.setString(2, surname);
-             pstmt.setString(3, nationality);
-             pstmt.setString(4, phone);
-             pstmt.setString(5, gender);
-             pstmt.setString(6, address);
 
-             pstmt.executeUpdate(); // Executes the insert query
-             JOptionPane.showMessageDialog(null, "Customer details added to database");
-             setVisible(false);
-         } catch (SQLException e) {
-             e.printStackTrace();
-             JOptionPane.showMessageDialog(null, "Failed");
-         }
-       
-      
+    public void actionPerformed(ActionEvent ae) {
+        String name = txtName.getText();
+        String surname = txtSurname.getText();
+        String nationality = txtNationality.getText();
+        String address = txtAddress.getText();
+        String phone = txtPhone.getText();
+        String gender = rbMale.isSelected() ? "Male" : "Female";
+
+        String query = "INSERT INTO passenger (name, surname, nationality, phone, gender, address) VALUES (?, ?, ?, ?, ?, ?)";
+
+        try (PreparedStatement pstmt = conn.prepareStatement(query)) { // Use the connection initialized in constructor
+            pstmt.setString(1, name);
+            pstmt.setString(2, surname);
+            pstmt.setString(3, nationality);
+            pstmt.setString(4, phone);
+            pstmt.setString(5, gender);
+            pstmt.setString(6, address);
+
+            pstmt.executeUpdate();
+            JOptionPane.showMessageDialog(this, "Customer details added to database");
+            setVisible(false);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Failed to add customer details.");
+        }
     }
+
     public static void main(String[] args) {
-        // Create an instance of AddCustomer window
         new AddCustomer();
     }
 }
-

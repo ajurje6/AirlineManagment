@@ -1,0 +1,17 @@
+package managment;
+import java.awt.*;
+import javax.swing.*;
+import java.awt.event.*;
+import java.sql.*;
+public class BoardingPass extends JFrame {
+		BoardingPass(){
+			setSize(700,350);
+			setTitle("Boarding Pass");
+			setLocationRelativeTo(null);
+			setVisible(true);
+		}
+	public static void main(String[] args) {
+		new BoardingPass();
+	}
+
+}
